@@ -15,7 +15,7 @@ public class AuctionDAO {
  	
         // 상품 등록
         public int insertAuctionItem(String title, String description, int startPrice) throws SQLException {
-                String sql = "INSERT INTO Pro (ID, TITLE, DESCRIPTION, START_PRICE, CURRENT_PRICE) "
+                String sql = "INSERT INTO AUCTION_ITEM (ID, TITLE, DESCRIPTION, START_PRICE, CURRENT_PRICE) "
                                + "VALUES (AUCTION_ITEM_SEQ.NEXTVAL, ?, ?, ?, ?)";
 
                 Connection conn = getConnection();

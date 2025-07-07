@@ -55,8 +55,9 @@ public class BidDAO {
 				return false;
 		}
 
-		// 1-3) Product 테이블의 최고가·최고입찰자 동시 업데이트
-		String updSql = "UPDATE PRODUCT SET CURRENT_PRICE = ?, WINNER_ID = ? WHERE PRODUCT_ID = ?";
+		// 1-3) AUCTION_ITEM 테이블의 최고가·최고입찰자 동시 업데이트
+		String updSql = "UPDATE AUCTION_ITEM " + "SET CURRENT_PRICE = ?, HIGHEST_BIDDER_ID = ? "
+				+ "WHERE PRODUCT_ID = ?";
 		try (PreparedStatement p = conn.prepareStatement(updSql)) {
 			p.setInt(1, bidAmount);
 			p.setString(2, memberId);

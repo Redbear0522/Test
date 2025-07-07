@@ -31,27 +31,8 @@ public class ProductDAO {
 
 	public ProductDAO() {}
         
-	//모든 상품 조회
-	public List<ProductDTO> selectAllProducts(Connection conn) {
-	    List<ProductDTO> list = new ArrayList<>();
-	    String sql = "SELECT PRODUCT_ID, PRODUCT_NAME, START_PRICE, IMAGE_RENAMED_NAME, SELLER_ID, STATUS FROM PRODUCT ORDER BY PRODUCT_ID DESC";
-	    try (PreparedStatement pstmt = conn.prepareStatement(sql);
-	         ResultSet rs = pstmt.executeQuery()) {
-	        while (rs.next()) {
-	            ProductDTO p = new ProductDTO();
-	            p.setProductId(rs.getInt("PRODUCT_ID"));
-	            p.setProductName(rs.getString("PRODUCT_NAME"));
-	            p.setStartPrice(rs.getInt("START_PRICE"));
-	            p.setImageRenamedName(rs.getString("IMAGE_RENAMED_NAME"));
-	            p.setSellerId(rs.getString("SELLER_ID"));
-	            p.setStatus(rs.getString("STATUS"));
-	            list.add(p);
-	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	    return list;
-	}
+    // --- (다른 메소드들은 기존과 동일) ---
+
     /**
      * 내가 입찰한 상품 목록을 조회하는 기능 (최종 수정)
      * 이제 이미지 파일 이름도 정확하게 가져옵니다.
@@ -90,9 +71,7 @@ public class ProductDAO {
         return list;
     }
 
-    /**
-     * 카테고리별 상품 카운트 조회
-     */
+    // --- (이하 다른 모든 메소드들은 기존과 동일합니다) ---
     public int selectProductCountByCategory(Connection conn, String category) {
         int listCount = 0;
         PreparedStatement pstmt = null;
@@ -116,9 +95,7 @@ public class ProductDAO {
         }
         return listCount;
     }
-    /**
-     * 카테고리별 페이징 상품 목록 조회
-     */
+
     public List<ProductDTO> selectProductListByCategory(Connection conn, String category, PageInfo pi) {
         List<ProductDTO> list = new ArrayList<>();
         PreparedStatement pstmt = null;
@@ -169,9 +146,7 @@ public class ProductDAO {
         }
         return list;
     }
-    /**
-     * 키워드 검색 상품 개수 조회
-     */
+    
     public int searchProductCount(Connection conn, String keyword) {
         int listCount = 0;
         PreparedStatement pstmt = null;
@@ -190,9 +165,7 @@ public class ProductDAO {
         finally { close(rs); close(pstmt); }
         return listCount;
     }
-    /**
-     * 키워드 검색 페이징 상품 목록 조회
-     */
+
     public List<ProductDTO> searchProductList(Connection conn, String keyword, PageInfo pi) {
         List<ProductDTO> list = new ArrayList<>();
         PreparedStatement pstmt = null;
@@ -235,14 +208,14 @@ public class ProductDAO {
         finally { close(rs); close(pstmt); }
         return list;
     }
-    /**
-     * 전체 활성 상품 개수 조회
-     */
+
     public int selectProductCount(Connection conn) {
         int listCount = 0;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        String sql = "SELECT COUNT(*) AS COUNT\r\n FROM PRODUCT \r\n WHERE STATUS = 'A'";
+        String sql = "SELECT COUNT(*) AS COUNT\r\n"
+        		+ "FROM PRODUCT \r\n"
+        		+ "WHERE STATUS = 'A'";
         try {
             pstmt = conn.prepareStatement(sql);
             rs = pstmt.executeQuery();
@@ -251,9 +224,7 @@ public class ProductDAO {
         finally { close(rs); close(pstmt); }
         return listCount;
     }
-    /**
-     * 전체 활성 상품 페이징 목록 조회
-     */
+
     public List<ProductDTO> selectProductList(Connection conn, PageInfo pi) {
         List<ProductDTO> list = new ArrayList<>();
         PreparedStatement pstmt = null;
@@ -295,9 +266,6 @@ public class ProductDAO {
         return list;
     }
 
-    /**
-     * 상품 상세 조회
-     */
     public ProductDTO selectProductById(Connection conn, int productId) {
         ProductDTO p = null;
         PreparedStatement pstmt = null;
@@ -329,9 +297,7 @@ public class ProductDAO {
         finally { close(rs); close(pstmt); }
         return p;
     }
-    /**
-     * 입찰 기록 삽입
-     */
+    
     public int insertBid(Connection conn, BidDTO b) {
         int result = 0;
         PreparedStatement pstmt = null;
@@ -347,9 +313,7 @@ public class ProductDAO {
         finally { close(pstmt); }
         return result;
     }
-    /**
-     * 현재가 업데이트
-     */
+    
     public int updateCurrentPrice(Connection conn, int productId, long bidPrice) {
         int result = 0;
         PreparedStatement pstmt = null;
@@ -363,7 +327,7 @@ public class ProductDAO {
         finally { close(pstmt); }
         return result;
     }
-    
+
     public int insertProduct(Connection conn, ProductDTO p) {
         int result = 0;
         PreparedStatement pstmt = null;
@@ -376,7 +340,7 @@ public class ProductDAO {
         		+ "			SEQ_PRODUCT_ID.NEXTVAL, ?, ?, ?,\r\n"
         		+ "			?, ?, 0, ?,\r\n"
         		+ "			?, ?, ?, ?, \r\n"
-        		+ "			SYSDATE, 'W'\r\n"
+        		+ "			SYSDATE, 'A'\r\n"
         		+ "		)";
         try {
             pstmt = conn.prepareStatement(sql);
@@ -402,9 +366,7 @@ public class ProductDAO {
         }
         return result;
     }
-    /**
-     * 판매자별 등록 상품 목록 조회
-     */
+
     public List<ProductDTO> selectProductsBySeller(Connection conn, String sellerId) {
         List<ProductDTO> list = new ArrayList<>();
         PreparedStatement pstmt = null;
@@ -430,9 +392,7 @@ public class ProductDAO {
         finally { close(rs); close(pstmt); }
         return list;
     }
-    /**
-     * 상품 삭제(취소) 처리 – STATUS='C' 로 변경
-     */
+    
     public int deleteProduct(Connection conn, int productId, String memberId) {
         int result = 0;
         PreparedStatement pstmt = null;
@@ -456,9 +416,7 @@ public class ProductDAO {
         
         return result;
     }
-    /**
-     * 낙찰자 결정용 최근 최고 입찰가 조회
-     */
+
     public BidDTO findWinner(Connection conn, int productId) {
         BidDTO winner = null;
         PreparedStatement pstmt = null;
@@ -490,9 +448,7 @@ public class ProductDAO {
         }
         return winner;
     }
-    /**
-     * 낙찰자, 최종 가격 업데이트
-     */
+
     public int updateProductWinner(Connection conn, int productId, String winnerId, int finalPrice) {
         int result = 0;
         PreparedStatement pstmt = null;
@@ -511,9 +467,7 @@ public class ProductDAO {
         }
         return result;
     }
-    /**
-     * 상품 상태 변경
-     */
+    
     public int updateProductStatus(Connection conn, int productId, String status) {
         int result = 0;
         PreparedStatement pstmt = null;
@@ -531,9 +485,6 @@ public class ProductDAO {
         }
         return result;
     }
-    /**
-     * 낙찰 상품 목록 조회
-     */
     public List<ProductDTO> selectWonProducts(Connection conn, String winnerId) {
         List<ProductDTO> list = new ArrayList<>();
         PreparedStatement pstmt = null;
@@ -571,9 +522,7 @@ public class ProductDAO {
         return list;
     }
     
-    /**
-    * 마지막 삽입된 상품 ID 조회 (시퀀스 CURRVAL)
-    */
+    // 가장 최근에 시퀀스로 생성된 PRODUCT_ID를 반환 (insert 직후에 호출해야 함)
     public int selectLastInsertedProductId(Connection conn) throws SQLException {
         String sql = "SELECT SEQ_PRODUCT_ID.CURRVAL FROM DUAL";
         try (PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -584,9 +533,10 @@ public class ProductDAO {
         }
         return -1; // 실패 시 -1 반환
     }
-    /**
-     * 최근 낙찰된 상품 목록 조회
-     */
+    
+ // ProductDAO.java
+
+    //최근 낙찰이 된 경매 물품 리시트 출력
     public List<ProductDTO> selectRecentWins(Connection conn) throws SQLException {
         List<ProductDTO> list = new ArrayList<>();
         String sql = "SELECT * FROM PRODUCT WHERE STATUS = 'E' AND WINNER_ID IS NOT NULL ORDER BY REG_DATE DESC";
@@ -608,7 +558,47 @@ public class ProductDAO {
         return list;
     }
     
-    
+    @WebServlet("/product/bid")
+    public class BidServlet extends HttpServlet {
+        protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+            request.setCharacterEncoding("UTF-8");
+            HttpSession session = request.getSession();
+            MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+
+            if (loginUser == null) {
+                response.sendRedirect(request.getContextPath() + "/member/loginForm.jsp");
+                return;
+            }
+
+            int productId = Integer.parseInt(request.getParameter("productId"));
+            long bidPrice = Long.parseLong(request.getParameter("bidPrice"));
+
+            Connection conn = getConnection();
+            ProductDAO dao = new ProductDAO();
+            int currentPrice = dao.selectProductById(conn, productId).getCurrentPrice();
+
+            if (bidPrice <= currentPrice) {
+                session.setAttribute("alertMsg", "입찰가는 현재가보다 높아야 합니다.");
+                close(conn);
+                response.sendRedirect(request.getContextPath() + "/product/productDetail.jsp?productId=" + productId);
+                return;
+            }
+
+            int result = dao.updateCurrentPrice(conn, productId, bidPrice);
+
+
+            if (result > 0) {
+                commit(conn);
+                session.setAttribute("alertMsg", "입찰 성공!");
+            } else {
+                rollback(conn);
+                session.setAttribute("alertMsg", "입찰 실패");
+            }
+
+            close(conn);
+            response.sendRedirect(request.getContextPath() + "/product/productDetail.jsp?productId=" + productId);
+        }
+    }
     public int reduceMileage(Connection conn, String memberId, long amount) {
         String sql = "UPDATE USERS SET MILEAGE = MILEAGE - ? WHERE MEMBER_ID = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {

@@ -1,13 +1,13 @@
 package com.auction.dao;
 
 import com.auction.vo.ScheduleDTO;
+import java.util.Date;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static com.auction.common.JDBCTemplate.*;
@@ -20,14 +20,8 @@ public class ScheduleDAO {
                      "VALUES (SCHEDULE_SEQ.NEXTVAL, ?, ?, ?, ?, SYSDATE, SYSDATE)";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, dto.getProductId());
-            if (dto.getStartTime() != null)
-                pstmt.setTimestamp(2, new Timestamp(dto.getStartTime().getTime()));
-            else
-                pstmt.setNull(2, java.sql.Types.TIMESTAMP);
-            if (dto.getEndTime() != null)
-                pstmt.setTimestamp(3, new Timestamp(dto.getEndTime().getTime()));
-            else
-                pstmt.setNull(3, java.sql.Types.TIMESTAMP);
+            pstmt.setTimestamp(2, new Timestamp(dto.getStartTime().getTime()));
+            pstmt.setTimestamp(3, new Timestamp(dto.getEndTime().getTime()));
             pstmt.setString(4, dto.getStatus());
 
             return pstmt.executeUpdate();
@@ -40,14 +34,8 @@ public class ScheduleDAO {
                      "WHERE SCHEDULE_ID = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, dto.getProductId());
-            if (dto.getStartTime() != null)
-                pstmt.setTimestamp(2, new Timestamp(dto.getStartTime().getTime()));
-            else
-                pstmt.setNull(2, java.sql.Types.TIMESTAMP);
-            if (dto.getEndTime() != null)
-                pstmt.setTimestamp(3, new Timestamp(dto.getEndTime().getTime()));
-            else
-                pstmt.setNull(3, java.sql.Types.TIMESTAMP);
+            pstmt.setTimestamp(2, new Timestamp(dto.getStartTime().getTime()));
+            pstmt.setTimestamp(3, new Timestamp(dto.getEndTime().getTime()));
             pstmt.setString(4, dto.getStatus());
             pstmt.setInt(5, dto.getScheduleId());
 
@@ -132,12 +120,18 @@ public class ScheduleDAO {
         }
         return list;
     }
-
-    /** 스케줄 상태 반환 (대기중/진행중/종료됨) */
+    
+ // ScheduleDAO.java
     public String getScheduleStatus(Date startTime, Date endTime) {
         Date now = new Date();
-        if (now.before(startTime))      return "대기중";
-        else if (now.after(endTime))    return "종료됨";
-        else                            return "진행중";
+        if (now.before(startTime)) {
+            return "대기중";
+        } else if (now.after(endTime)) {
+            return "종료됨";
+        } else {
+            return "진행중";
+        }
     }
+
+
 }

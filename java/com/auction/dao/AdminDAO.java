@@ -167,7 +167,7 @@ public class AdminDAO {
         try (PreparedStatement ps1 = conn.prepareStatement(
                  "SELECT MEMBER_ID, AMOUNT FROM CHARGE_REQUEST WHERE REQ_ID = ? AND STATUS = 'W'");
              PreparedStatement ps2 = conn.prepareStatement(
-                 "UPDATE USERS SET MILEAGE = MILEAGE + ? WHERE MEMBER_ID = ?");
+                 "UPDATE USERS SET MILEAGE = MILEAGE + ? WHERE \"MEMBER_ID\" = ?");
              PreparedStatement ps3 = conn.prepareStatement(
                  "UPDATE CHARGE_REQUEST SET STATUS = 'A', APPROVE_DATE = SYSDATE WHERE REQ_ID = ?")) {
             
