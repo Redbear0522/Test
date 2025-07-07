@@ -86,7 +86,7 @@
     <script>
         <% if(result > 0) { %>
             alert("회원가입이 완료되었습니다. 로그인 페이지로 이동합니다.");
-            location.href = "luxury-login.jsp";
+            location.href = "loginForm.jsp";
         <% } else { %>
             alert("회원가입에 실패했습니다. 다시 시도해주세요.");
             location.href = "enroll_step1.jsp";

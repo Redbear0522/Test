@@ -44,8 +44,8 @@
         }
 
         // 신청 INSERT
-        String insertVipSql = "INSERT INTO VIP_BENEFIT (MEMBER_ID, OPTION_NAME, START_DATE) VALUES (?, ?, SYSDATE)";
-		pstmt = conn.prepareStatement(insertVipSql);
+        String insertSql = "INSERT INTO VIP_OPTION_REQUEST (REQUEST_ID, MEMBER_ID, OPTION_NAME) VALUES (VIP_OPTION_REQ_SEQ.NEXTVAL, ?, ?)";
+        pstmt = conn.prepareStatement(insertSql);
         pstmt.setString(1, memberId);
         pstmt.setString(2, option);
         int result = pstmt.executeUpdate();

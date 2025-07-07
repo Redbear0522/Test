@@ -24,7 +24,7 @@
     
 </head>
 <body class="login-page">
-    <jsp:include page="/layout/header/luxury-header.jsp" />
+    <jsp:include page="<%=request.getContextPath() %>/layout/header/luxury-header.jsp" />
     
     <div class="login-container">
         <div class="login-wrapper">
@@ -44,12 +44,12 @@
                 <form action="<%=ctx%>/member/loginAction.jsp" method="post">
                     <div class="form-group">
                         <label for="userid">아이디</label>
-                        <input type="text"  id="userId" name="userId" class="form-control" placeholder="아이디를 입력하세요" required>
+                        <input type="text" id="userid" name="userid" class="form-control" placeholder="아이디를 입력하세요" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="passwd">비밀번호</label>
-                        <input type="password" id="userPwd" name="userPwd" class="form-control" placeholder="비밀번호를 입력하세요" required>
+                        <input type="password" id="passwd" name="passwd" class="form-control" placeholder="비밀번호를 입력하세요" required>
                     </div>
                     
                     <div class="form-options">
@@ -57,13 +57,31 @@
                             <input type="checkbox" name="remember">
                             <span>아이디 저장</span>
                         </label>
-                        <a href="findIdPwForm.jsp" class="forgot-link">아이디/비밀번호 찾기</a>
+                        <a href="#" class="forgot-link">아이디/비밀번호 찾기</a>
                     </div>
                     
                     <button type="submit" class="login-btn">로그인</button>
                 </form>
-                               
-                                                
+                
+                <div class="divider">
+                    <span>간편 로그인</span>
+                </div>
+                
+                <div class="social-login">
+                    <button class="social-btn">
+                        <i class="fab fa-google"></i>
+                        <span>Google</span>
+                    </button>
+                    <button class="social-btn">
+                        <i class="fab fa-apple"></i>
+                        <span>Apple</span>
+                    </button>
+                    <button class="social-btn">
+                        <img src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_small.png" alt="Kakao">
+                        <span>Kakao</span>
+                    </button>
+                </div>
+                
                 <div class="signup-link">
                     아직 회원이 아니신가요?<a href="<%=ctx%>/member/enroll_step1.jsp">회원가입</a>
                 </div>
@@ -71,6 +89,6 @@
         </div>
     </div>
     
-    <jsp:include page="/layout/footer/luxury-footer.jsp" />
+    <jsp:include page="<%=request.getContextPath() %>/layout/footer/luxury-footer.jsp" />
 </body>
 </html>

@@ -4,7 +4,6 @@
 <%@ page import="com.auction.vo.MemberDTO" %>
 <%@ page import="com.auction.vo.BidDTO" %>
 <%@ page import="com.auction.dao.ProductDAO" %>
-<%@ page import="com.auction.dao.TransactionLogDAO" %>
 <%@ page import="static com.auction.common.JDBCTemplate.*" %>
 
 <%
@@ -15,17 +14,12 @@
         return;
     }
 
- // 2. 파라미터 받기
+    // 2. 파라미터 받기
     int productId    = Integer.parseInt(request.getParameter("productId"));
     int bidPrice     = Integer.parseInt(request.getParameter("bidPrice"));
     int currentPrice = Integer.parseInt(request.getParameter("currentPrice"));
 
-    // 3. DB 연결 및 DAO 객체 생성
-    Connection conn = getConnection();
-    ProductDAO dao = new ProductDAO();
-    TransactionLogDAO logDao = new TransactionLogDAO();
-
-    // 4. 유효성 검증: 입찰가 > 현재가
+    // 3. 유효성 검증: 입찰가 > 현재가
     if (bidPrice <= currentPrice) {
 %>
 <script>
@@ -50,9 +44,10 @@ if (bidPrice > loginUser.getMileage()) {
     return;
 }
 
-// 현재가 업데이트 & 마일리지 차감
-int resultPrice   = dao.updateCurrentPrice(conn, productId, bidPrice);
-int resultMileage = dao.reduceMileage   (conn, loginUser.getMemberId(), bidPrice);
+	//1) 현재가 업데이트
+   int resultPrice = dao.updateCurrentPrice(conn, productId, (Long)bidPrice);
+   // 2) 마일리지 차감
+   int resultMileage = dao.reduceMileage(conn, loginUser.getMemberId(), bidPrice);
 
    if(resultPrice > 0 && resultMileage > 0) {
      commit(conn);

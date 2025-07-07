@@ -14,7 +14,6 @@
         response.sendRedirect(request.getContextPath() + "/member/loginForm.jsp");
         return;
     }
-    String ctx = request.getContextPath();
 %>
 <!DOCTYPE html>
 <html>
@@ -24,34 +23,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="<%=ctx%>/resources/css/luxury-global-style.css">
-<link rel="stylesheet" href="<%= ctx %>/resources/css/layout.css" />
- <!-- Font Awesome 다시 추가 -->
-   <link
-     rel="stylesheet"
-     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-     integrity="sha512-p1CmX1YlR1X+VHN/99qzygrhcQ+AyxDJF9+u6EQZK8tkg8n4hqqy5p1eXH/Z5W7wGMtpY+Oc4+w0wXK4mvx1eg=="
-     crossorigin="anonymous"
-     referrerpolicy="no-referrer"
-   />
 <style>
-body { 
+    body { 
         margin: 0; 
         background-color: #f4f4f4; 
         color: #333; 
         font-family: 'Noto Sans KR', sans-serif; 
-        /* 전체 페이지는 일반 흐름(flow) 유지 */
-    }
-
-    /* 메인 컨텐츠(폼)만 화면 중앙에 배치 */
-    .charge-main {
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: calc(100vh - 200px); /* 헤더+푸터 높이에 따라 조절 */
-        padding: 40px 0;
+        height: 100vh;
     }
-    .charge-container {
+    .container {
         width: 500px;
         padding: 40px;
         background-color: #fff;
@@ -95,10 +78,9 @@ body {
 </style>
 </head>
 <body>
-<jsp:include page="/layout/header/luxury-header.jsp" />  
-<div class="charge-main">
-<br>
-      <div class="charge-container">
+    <jsp:include page="/layout/header/luxury-header.jsp" />
+    
+    <div class="charge-container">
         <h1>마일리지 충전</h1>
         
         <div class="current-mileage">
@@ -109,6 +91,18 @@ body {
         </div>
         
         <form action="chargeMileage.jsp" method="post" class="charge-form" onsubmit="return validateForm();">
+            <div class="form-group">
+                <label>충전 금액 선택</label>
+                <div class="amount-buttons">
+                    <button type="button" class="amount-btn" onclick="setAmount(10000)">1만원</button>
+                    <button type="button" class="amount-btn" onclick="setAmount(30000)">3만원</button>
+                    <button type="button" class="amount-btn" onclick="setAmount(50000)">5만원</button>
+                    <button type="button" class="amount-btn" onclick="setAmount(100000)">10만원</button>
+                    <button type="button" class="amount-btn" onclick="setAmount(200000)">20만원</button>
+                    <button type="button" class="amount-btn" onclick="setAmount(500000)">50만원</button>
+                </div>
+            </div>
+            
             <div class="form-group">
                 <label for="amount">직접 입력</label>
                 <div class="custom-amount">
@@ -137,9 +131,8 @@ body {
             <i class="fas fa-arrow-left"></i> 마이페이지로 돌아가기
         </a>
     </div>
-    </div>
     
-    
+    <jsp:include page="/layout/footer/luxury-footer.jsp" />
     
     <script>
     function setAmount(value) {
@@ -177,6 +170,5 @@ body {
         });
     });
     </script>
-<jsp:include page="/layout/footer/luxury-footer.jsp" />    
 </body>
 </html>

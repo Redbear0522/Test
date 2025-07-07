@@ -2,6 +2,7 @@
 <%@ page import="java.sql.*" %>
 <%@ page import="java.text.DecimalFormat" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page import="com.auction.vo.MemberDTO" %>
 <%@ page import="com.auction.vo.ProductDTO" %>
 <%@ page import="com.auction.dao.ProductDAO" %>
@@ -23,6 +24,13 @@
     List<ProductDTO> myWonProducts = pDao.selectWonProducts(conn, loginUser.getMemberId());
     close(conn);
 
+ 	// 관심 상품 목록 가져오기
+    List<String> interestItems = (List<String>) session.getAttribute("interestItems");
+    if (interestItems == null) {
+        interestItems = new ArrayList<>();
+        session.setAttribute("interestItems", interestItems);
+    }
+    
     boolean isVip = false;
     try (Connection conn2 = getConnection()) {
         String sql = "SELECT 1 FROM VIP_INFO WHERE MEMBER_ID = ?";
@@ -505,7 +513,7 @@
                     <a href="#" class="menu-item">
                         <i class="fas fa-trophy" style="margin-right: 10px;"></i>낙찰 내역
                     </a>
-                    <a href="#" class="menu-item">
+                    <a href="interestPage.jsp" class="menu-item">
                         <i class="fas fa-heart" style="margin-right: 10px;"></i>관심 상품
                     </a>
                     <a href="chargeForm.jsp" class="menu-item">
@@ -514,7 +522,7 @@
                 </nav>
             </aside>
             
-            <!-- 메인 컨텐츠 -->
+             <!-- 메인 컨텐츠 -->
             <main class="main-content">
                 <h1 class="page-title">My Dashboard</h1>
                 
@@ -551,8 +559,36 @@
                         <p class="info-card-label">등록 상품</p>
                         <p class="info-card-value"><%= myProducts.size() %>건</p>
                     </div>
+
+                    <!-- 관심 상품 카드 추가 -->
+                    <div class="info-card">
+                        <div class="info-card-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <p class="info-card-label">관심 상품</p>
+                        <p class="info-card-value">
+                            <% 
+                                if (interestItems != null && !interestItems.isEmpty()) {
+                                    for (int i = 0; i < Math.min(3, interestItems.size()); i++) {
+                            %>
+                                        <div><%= interestItems.get(i) %></div>
+                            <%   }
+                                } else { 
+                            %>
+                                    등록된 관심 상품이 없습니다.
+                            <% } %>
+                              <!-- "더 보기" 버튼 추가 관심 상품이 4개 이상일시 -->
+                <% if (interestItems.size() > 3) { %>
+                    <div style="text-align: center;">
+                        <a href="interestPage.jsp" class="btn btn-primary">더 보기</a>
+                    </div>
+                <% } %>
+            
+                        </p>
+                    </div>
                 </div>
-                
+
+         
                 <!-- VIP 혜택 신청 (VIP만 표시) -->
                 <% if(isVip) { %>
                 <div class="vip-option-form">

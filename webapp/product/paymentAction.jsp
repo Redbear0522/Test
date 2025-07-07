@@ -60,7 +60,7 @@
 
     // 5. 결제 처리 (트랜잭션 관리)
     MemberDAO mDao = new MemberDAO();
-    int result1 = mDao.updateMileage(conn, loginUser.getMemberId(), -finalPrice);
+    int result1 = mDao.deductMileage(conn, loginUser.getMemberId(), finalPrice);
     int result2 = pDao.updateProductStatus(conn, productId, "P");
     int result3 = 1;
     if(!p.getStatus().equals("E")){

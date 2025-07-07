@@ -286,6 +286,10 @@
     </aside>
 </div>
 
+<footer class="footer">
+    <jsp:include page="/layout/footer/footer.jsp" />
+</footer>
+
  <script>
         document.addEventListener('DOMContentLoaded', function() {
             const timers = document.querySelectorAll('.timer');

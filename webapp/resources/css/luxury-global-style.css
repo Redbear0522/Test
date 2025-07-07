@@ -29,7 +29,7 @@
     
     /* Spacing */
     --container-width: 1400px;
-    --header-height: 80px;
+    --header-height: 120px;
 }
 
 body {
@@ -80,11 +80,13 @@ ul {
    =================================== */
 
 .luxury-header {
-    position: fixed; /* 고정일 경우 */
+    position: fixed;
     top: 0;
-    width: 100%;
-    z-index: 1000;   /* 매우 높게 되어 있음 */
-    /* ... */
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: var(--bg-white);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
 /* Header Top */
